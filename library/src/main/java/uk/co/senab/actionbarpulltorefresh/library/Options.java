@@ -27,6 +27,7 @@ public final class Options {
     private static final boolean DEFAULT_REFRESH_ON_UP = false;
     private static final int DEFAULT_REFRESH_MINIMIZED_DELAY = 1 * 1000;
     private static final boolean DEFAULT_REFRESH_MINIMIZE = true;
+    private static final boolean DEFAULT_FROM_TOP = true;
 
     public static Builder create() {
         return new Builder();
@@ -40,6 +41,7 @@ public final class Options {
     float refreshScrollDistance = DEFAULT_REFRESH_SCROLL_DISTANCE;
     boolean refreshOnUp = DEFAULT_REFRESH_ON_UP;
     int refreshMinimizeDelay = DEFAULT_REFRESH_MINIMIZED_DELAY;
+    boolean fromTop =  DEFAULT_FROM_TOP;
 
     /**
      * Enable or disable the header 'minimization', which by default means that the majority of
@@ -125,6 +127,11 @@ public final class Options {
             return this;
         }
 
+        public Builder fromTop(boolean b) {
+        	mOptions.fromTop = b;
+        	return this;
+        }
+        
         /**
          * @return the built {@link Options} instance.
          */

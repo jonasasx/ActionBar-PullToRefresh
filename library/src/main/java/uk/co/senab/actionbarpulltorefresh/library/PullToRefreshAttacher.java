@@ -61,7 +61,7 @@ public class PullToRefreshAttacher {
 
     private float mInitialMotionY, mLastMotionY, mPullBeginY;
     private float mInitialMotionX;
-    private boolean mIsBeingDragged, mIsRefreshing, mHandlingTouchEventFromDown;
+    private boolean mIsBeingDragged, mIsRefreshing, mHandlingTouchEventFromDown, mFromTop;
     private View mViewBeingDragged;
 
     private final WeakHashMap<View, ViewDelegate> mRefreshableViews;
@@ -93,7 +93,7 @@ public class PullToRefreshAttacher {
         mRefreshOnUp = options.refreshOnUp;
         mRefreshMinimizeDelay = options.refreshMinimizeDelay;
         mRefreshMinimize = options.refreshMinimize;
-
+        mFromTop = options.fromTop;
         // EnvironmentDelegate
         mEnvironmentDelegate = options.environmentDelegate != null
                 ? options.environmentDelegate
@@ -126,6 +126,7 @@ public class PullToRefreshAttacher {
         // Now HeaderView to Activity
         mAddHeaderViewRunnable = new AddHeaderViewRunnable();
         mAddHeaderViewRunnable.start();
+        resetTouch();
     }
 
     /**
@@ -270,8 +271,8 @@ public class PullToRefreshAttacher {
                 // We're not currently being dragged so check to see if the user has
                 // scrolled enough
                 if (!mIsBeingDragged && mInitialMotionY > 0f) {
-                    final float yDiff = y - mInitialMotionY;
-                    final float xDiff = x - mInitialMotionX;
+				final float yDiff = (y - mInitialMotionY) * (mFromTop ? 1 : -1);
+				final float xDiff = x - mInitialMotionX;
 
                     if (Math.abs(yDiff) > Math.abs(xDiff) && yDiff > mTouchSlop) {
                         mIsBeingDragged = true;
@@ -362,7 +363,7 @@ public class PullToRefreshAttacher {
                 final float y = event.getY();
 
                 if (mIsBeingDragged && y != mLastMotionY) {
-                    final float yDx = y - mLastMotionY;
+                	final float yDx = (y - mLastMotionY) * (mFromTop ? 1 : -1);
 
                     /**
                      * Check to see if the user is scrolling the right direction
@@ -410,7 +411,7 @@ public class PullToRefreshAttacher {
     void resetTouch() {
         mIsBeingDragged = false;
         mHandlingTouchEventFromDown = false;
-        mInitialMotionY = mLastMotionY = mPullBeginY = -1f;
+		mInitialMotionY = mLastMotionY = mPullBeginY = mFromTop ? -1f : Float.MAX_VALUE;
     }
 
     void onPullStarted(float y) {
@@ -427,7 +428,7 @@ public class PullToRefreshAttacher {
         }
 
         final float pxScrollForRefresh = getScrollNeededForRefresh(view);
-        final float scrollLength = y - mPullBeginY;
+		final float scrollLength = Math.abs(y - mPullBeginY);
 
         if (scrollLength < pxScrollForRefresh) {
             mHeaderTransformer.onPulled(scrollLength / pxScrollForRefresh);
