@@ -42,7 +42,7 @@ import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ViewDelegate;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class PullToRefreshAttacher {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String LOG_TAG = "PullToRefreshAttacher";
 
     /* Member Variables */
@@ -270,7 +270,7 @@ public class PullToRefreshAttacher {
             case MotionEvent.ACTION_MOVE: {
                 // We're not currently being dragged so check to see if the user has
                 // scrolled enough
-                if (!mIsBeingDragged && mInitialMotionY > 0f) {
+				if (!mIsBeingDragged && (mFromTop && mInitialMotionY > 0f || !mFromTop && mInitialMotionY < Float.MAX_VALUE)) {
 				final float yDiff = (y - mInitialMotionY) * (mFromTop ? 1 : -1);
 				final float xDiff = x - mInitialMotionX;
 

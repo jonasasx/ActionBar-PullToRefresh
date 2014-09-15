@@ -41,7 +41,7 @@ import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ViewDelegate;
  */
 public class PullToRefreshLayout extends FrameLayout {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final String LOG_TAG = "PullToRefreshLayout";
 
     private PullToRefreshAttacher mPullToRefreshAttacher;
