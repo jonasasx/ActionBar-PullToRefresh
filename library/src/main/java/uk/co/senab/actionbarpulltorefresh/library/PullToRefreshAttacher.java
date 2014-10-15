@@ -42,7 +42,7 @@ import uk.co.senab.actionbarpulltorefresh.library.viewdelegates.ViewDelegate;
 @TargetApi(Build.VERSION_CODES.ICE_CREAM_SANDWICH)
 public class PullToRefreshAttacher {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     private static final String LOG_TAG = "PullToRefreshAttacher";
 
     /* Member Variables */
